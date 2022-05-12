@@ -1,0 +1,3 @@
+#average salary of all employees
+SELECT first_name, last_name, (SELECT ROUND(AVG(salary),2) FROM salaries) avg_salary
+FROM employees
