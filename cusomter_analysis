@@ -1,0 +1,4 @@
+SELECT a.customer_id, a.customer_name, a.age, a.region b.category 
+FROM
+(SELECT customer_name, age, region FROM customers WHERE region = 'South') a,
+(SELECT customer_id, category FROM sales) b;
