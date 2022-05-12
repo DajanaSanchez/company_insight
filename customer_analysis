@@ -1,4 +1,14 @@
+#gather customer information 
 SELECT a.customer_id, a.customer_name, a.age, a.region b.category 
 FROM
 (SELECT customer_name, age, region FROM customers WHERE region = 'South') a,
 (SELECT customer_id, category FROM sales) b;
+
+
+#retrieve list of customer ids, product ids, order line, and customer name
+
+SELECT customer_id, product_id, order_line, 
+(SELECT customer_name FROM customers c
+WHERE s.customer_id = c.customer_id) 
+FROM sales s
+ORDER BY customer_id;
