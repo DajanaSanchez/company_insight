@@ -1,0 +1,9 @@
+#return a list of managers and their department names
+SELECT dm.*, d.dept_name
+FROM dept_manager dm, (SELECT dept_no, dept_name, FROM departments) d
+WHERE dm.dept_no = d.dept_no;
+
+#return a list of managers including full names and department names
+SELECT e.first_name, e.last_name, d.dept_name FROM dept_manager dm, employees e,
+(SELECT dept_no, dept_name FROM departments) d
+WHERE dm.dept_no = d.dept_no AND e.emp_no = dm.emp_no;
