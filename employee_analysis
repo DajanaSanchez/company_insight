@@ -28,3 +28,38 @@ AND emp_no IN (SELECT emp_no FROM dept_emp
 				WHERE dept_no IN ('d002','d003'))
 GROUP BY emp_no
 ORDER BY avg_salary DESC;
+
+#Return a list of all employees number, first and last name. Also, return the average salary of all the employees and average salary of each employee and the difference
+
+SELECT e.emp_no, e.first_name, e.last_name, a.emp_avg_salary,
+(SELECT ROUND(AVG(salary),2) FROM salaries) AS avg_salary,
+a.emp_avg_salary - (SELECT ROUND(AVG(salary),2) FROM salaries) AS diff
+FROM employees e
+JOIN (SELECT emp_no, ROUND(AVG(salary),2) AS emp_avg_salary
+	  FROM salaries
+	  GROUP BY emp_no
+	  ORDER BY emp_no) a
+ON e.emp_no = a.emp_no
+ORDER BY e.emp_no;
+
+#Find the difference between the maximum salary of employees in the Finance or HR department and the maximum salary of all employees
+
+SELECT e.emp_no, e.first_name, e.last_name, a.emp_max_salary,
+(SELECT MAX(salary) max_salary FROM salaries), 
+(SELECT MAX(salary) max_salary FROM salaries) - a.emp_max_salary salary_diff
+FROM employees e
+JOIN (SELECT s.emp_no, MAX(salary) AS emp_max_salary
+				   FROM salaries s
+				   GROUP BY s.emp_no
+				   ORDER BY s.emp_no) a
+ON e.emp_no = a.emp_no
+WHERE e.emp_no IN (SELECT emp_no FROM dept_emp WHERE dept_no IN ('d002', 'd003'))
+ORDER BY emp_no;
+
+#Find the average salary excluding the highest and the lowest salaries
+
+SELECT ROUND(AVG(salary), 2) avg_salary
+FROM salaries
+WHERE salary NOT IN (
+(SELECT MIN(salary) FROM salaries),
+(SELECT MAX(salary) FROM salaries))
