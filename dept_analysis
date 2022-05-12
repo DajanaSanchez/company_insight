@@ -18,3 +18,9 @@ SELECT emp_no, dept_no,
 WHERE d.dept_name = 'Customer Service')
 FROM dept_emp
 WHERE dept_no = 'd009'
+
+#Retrieve a list of all managers who became managers after the 1st of January, 1985 and are in the Finance or HR department
+
+SELECT * FROM dept_manager
+WHERE from_date > '1985-01-01'
+AND dept_no IN (SELECT dept_no FROM departments WHERE dept_name = 'Finance' OR dept_name = 'Human Resources')
