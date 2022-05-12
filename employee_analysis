@@ -12,3 +12,19 @@ WHERE dept_no IN
 (SELECT dept_no FROM departments
  WHERE dept_name = 'Customer Service')) b
  ON a.emp_no = b.emp_no;
+ 
+ #Retrieve a list of all employees that earn above 120,000 and are in Finance/HR
+ 
+SELECT emp_no, salary FROM salaries
+WHERE salary > 120000
+AND emp_no IN (SELECT emp_no FROM departments WHERE dept_no = 'd002' OR dept_no = 'd003');
+
+# & Retrieve the avg salary of these employees
+
+SELECT emp_no, ROUND(AVG(salary),2) AS avg_salary 
+FROM salaries
+WHERE salary > 120000
+AND emp_no IN (SELECT emp_no FROM dept_emp
+				WHERE dept_no IN ('d002','d003'))
+GROUP BY emp_no
+ORDER BY avg_salary DESC;
