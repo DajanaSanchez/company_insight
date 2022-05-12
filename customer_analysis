@@ -12,3 +12,27 @@ SELECT customer_id, product_id, order_line,
 WHERE s.customer_id = c.customer_id) 
 FROM sales s
 ORDER BY customer_id;
+
+#retrieve a list of customers id, name that have bought the most from the store
+
+SELECT c.customer_id, c.customer_name, a.cust_count
+FROM customers c,
+(SELECT customer_id, COUNT(*) AS cust_count
+FROM sales
+GROUP BY customer_id
+ORDER BY cust_count DESC) AS a
+WHERE c.customer_id = a.customer_id
+ORDER BY a.cust_count DESC
+LIMIT 5;
+
+#Retrieve a list of the customer name and segment of those customers that bought the most from the store and had the highest total sales
+
+SELECT c.customer_id, c.customer_name, c.segment, a.cust_count, a.total_sales
+FROM customers c,
+(SELECT customer_id, COUNT(*) AS cust_count, SUM(sales) total_sales
+FROM sales
+GROUP BY customer_id
+ORDER BY total_sales DESC, cust_count DESC) AS a
+WHERE c.customer_id = a.customer_id
+ORDER BY a.total_sales DESC, a.cust_count DESC
+LIMIT 5;
