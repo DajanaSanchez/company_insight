@@ -1,3 +1,14 @@
 #average salary of all employees
+
 SELECT first_name, last_name, (SELECT ROUND(AVG(salary),2) FROM salaries) avg_salary
 FROM employees
+
+#list all employees in the customer service department 
+
+SELECT a.emp_no, b.dept_no, first_name, last_name FROM employees a
+JOIN
+(SELECT * FROM dept_emp
+WHERE dept_no IN 
+(SELECT dept_no FROM departments
+ WHERE dept_name = 'Customer Service')) b
+ ON a.emp_no = b.emp_no;
